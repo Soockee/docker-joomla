@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  php-stack:
+    image: docker.io/sockee/php-stack
+    ports:
+      - "8080:80"
+      - "9001:22"
+      - "3306:3306"
+    volumes: 
+      - ./www:/www
+      - ./joomla-cms:/www/joomla-cms
