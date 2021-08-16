@@ -8,5 +8,4 @@ services:
       - "9001:22"
       - "3306:3306"
     volumes: 
-      - ./www:/www
-      - ./joomla-cms:/www/joomla-cms
+      - ./joomla-cms:/www/joomla_save
