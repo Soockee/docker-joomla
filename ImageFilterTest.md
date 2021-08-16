@@ -71,3 +71,19 @@ Plugin XML
 	</files>
 </extension>
 ```
+
+## Notes: 
+
+does following snipped (90) in  ImageFilterRegistry.php work properly for namespaces with aliases?
+```
+if (\is_string($handler) && !class_exists($handler))
+```
+
+concern comes from : https://www.php.net/manual/en/function.class-exists.php
+```
+If you are using aliasing to import namespaced classes, take care that class_exists will not work using the short, aliased class name - apparently whenever a class name is used as string, only the full-namespace version can be used
+
+use a\namespaced\classname as coolclass;
+
+class_exists( 'coolclass' ) => false
+```

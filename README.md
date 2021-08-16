@@ -79,3 +79,5 @@ pw: simonsimonsimon
 ### Removing Joomla installation Config -> Resetting DB connection
 
 delete configuration.php in joomla root directory
+
+
