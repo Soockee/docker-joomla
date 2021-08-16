@@ -47,7 +47,7 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 # Joomla
 RUN  git clone https://github.com/joomla/joomla-cms /www/joomla \
  && cd /www/joomla \
- && git checkout 4.0-dev \
+ && git checkout 4.1-dev \
  && composer install  \
  && npm ci \
  && ln -sf /projects /opt/lampp/htdocs/projects
