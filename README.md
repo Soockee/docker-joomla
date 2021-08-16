@@ -52,3 +52,30 @@ ssh root@localhost -p 9001
 
 Install the sample multi language and open http://localhost:8080/www/projects/joomla-cms/index.php/de/
 ![](./img/languages.png)
+
+
+## Pizza, Bugs & Fun
+
+### Setting up PR
+
+```bash
+docker-compose up
+ssh root@localhost -p 9001 # or  docker exec -it <containername> bash
+
+(in container shell)
+git clone https://github.com/wilsonge/joomla-cms/tree/refactor/image-filter-registry /www/PR_31804
+git checkout feature/image-filter-registry
+composer i 
+npm ci 
+```
+
+Install Joomla with 'pr_db' as db name in order to preserve database data and therefore joomla integrity
+
+
+username: simon
+pw: simonsimonsimon
+
+
+### Removing Joomla installation Config -> Resetting DB connection
+
+delete configuration.php in joomla root directory

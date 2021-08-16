@@ -9,3 +9,7 @@ services:
       - "3306:3306"
     volumes: 
       - ./joomla-cms:/www/joomla_save
+      - ./joomla-pr:/www/PR_31804
+      - ./mysql:/opt/lampp/var/mysql/save_db
+      - ./mysql:/opt/lampp/var/mysql/pr_db
+

@@ -49,8 +49,7 @@ RUN  git clone https://github.com/joomla/joomla-cms /www/joomla \
  && cd /www/joomla \
  && git checkout 4.1-dev \
  && composer install  \
- && npm ci \
- && ln -sf /projects /opt/lampp/htdocs/projects
+ && npm ci 
 
 ADD bash_alias /bash_alias
 
