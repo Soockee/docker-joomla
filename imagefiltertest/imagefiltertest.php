@@ -59,8 +59,6 @@ class PlgSystemImageFilterTest extends CMSPlugin
 		Log::add('IFR STARTING  INIT', Log::DEBUG, 'IFR');
 	// $image = new CustomImage(imagecreatetruecolor(1, 1));
 	// $image->getServiceRegistry()->register("superbrightness", SuperBrightness::class);
-		Log::add('CUSTOM NAMESPACES IMAGE CREATED', Log::DEBUG, 'IFR');
-
 		// $type = "brightness";
 		$this->checkDefaultImageClassWithCustomFilter("superbrightness");
 		$this->checkCustomImageClass("superbrightness");
@@ -87,9 +85,13 @@ class PlgSystemImageFilterTest extends CMSPlugin
 	{
 		$image = new CustomImage(imagecreatetruecolor(1, 1));
 		// Verify that the filter type exists.
+		Log::add('CustomImage created', Log::DEBUG, 'IFR');
+
 		$serviceRegistry =  CustomImage::getServiceRegistry();
 		if(!$serviceRegistry->hasService($type)){
 			$serviceRegistry->register($type, SuperBrightness::class);
+			Log::add('CustomFilter ' . SuperBrightness::class . ' registered', Log::DEBUG, 'IFR');
+
 		}
 		$className = $this->getClassName($type, $serviceRegistry, CustomImage::class);
 
