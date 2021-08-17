@@ -67,6 +67,8 @@ class PlgSystemImageFilterTest extends CMSPlugin
 	public  function checkDefaultImageClassWithCustomFilter($type)
 	{
 		$image = new Image(imagecreatetruecolor(1, 1));
+		Log::add('Default created', Log::DEBUG, 'IFR');
+	
 		// Verify that the filter type exists.
 		$serviceRegistry = Image::getServiceRegistry();
 		if(!$serviceRegistry->hasService($type)){
