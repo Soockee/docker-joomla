@@ -32,6 +32,7 @@ class Brightness extends ImageFilter
 	 */
 	public function execute(array $options = [])
 	{
+		
 		// Validate that the brightness value exists and is an integer.
 		if (!isset($options[IMG_FILTER_BRIGHTNESS]) || !\is_int($options[IMG_FILTER_BRIGHTNESS]))
 		{

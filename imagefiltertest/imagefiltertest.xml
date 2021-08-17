@@ -12,6 +12,4 @@
 	<files>
 		<filename plugin="imagefiltertest">imagefiltertest.php</filename>
 	</files>
-	<namespace>
-	</namespace>
 </extension>

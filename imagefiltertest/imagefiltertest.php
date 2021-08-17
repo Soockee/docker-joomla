@@ -11,11 +11,14 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Image\Image;
-use Joomla\CMS\Image\ImageFilterRegistry;
+use Joomla\CMS\Image\ImageFilterRegistry as defaultIFR;
 use Joomla\CMS\Image\Filter\Brightness;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Customimage\Filter\SuperBrightness;
 use Joomla\CMS\Customimage\CustomImage;
+use Joomla\CMS\Customimage\CustomImageFilterRegistry as customIFR;
+use Joomla\CMS\Customimage\ImageFilterRegistry;
+
 /**
  * Joomla! Language Filter Plugin.
  *
@@ -44,7 +47,6 @@ class PlgSystemImageFilterTest extends CMSPlugin
 	public function __construct(&$subject, $config)
 	{
 		parent::__construct($subject, $config);
-		Log::add('IFR Construct', Log::DEBUG, 'IFR');
 	}
 	/**
 	 * After initialise.
@@ -55,20 +57,18 @@ class PlgSystemImageFilterTest extends CMSPlugin
 	 */
 	public function onAfterInitialise()
 	{	
-		JLoader::import('socke.customimage.library');
-		Log::add('IFR STARTING  INIT', Log::DEBUG, 'IFR');
-	// $image = new CustomImage(imagecreatetruecolor(1, 1));
-	// $image->getServiceRegistry()->register("superbrightness", SuperBrightness::class);
-		// $type = "brightness";
-		$this->checkDefaultImageClassWithCustomFilter("superbrightness");
-		$this->checkCustomImageClass("superbrightness");
+		Log::add('Image Registry Test initialized', Log::DEBUG, 'IFR');
+		// $this->checkDefaultImageClassWithCustomFilter("superbrightness");
+		// $this->checkCustomImageClass("superbrightness");
+
+		$this->checkCustomFilterRegistry();
 	}
 	
 	public  function checkDefaultImageClassWithCustomFilter($type)
 	{
 		$image = new Image(imagecreatetruecolor(1, 1));
 		Log::add('Default created', Log::DEBUG, 'IFR');
-	
+
 		// Verify that the filter type exists.
 		$serviceRegistry = Image::getServiceRegistry();
 		if(!$serviceRegistry->hasService($type)){
@@ -93,7 +93,6 @@ class PlgSystemImageFilterTest extends CMSPlugin
 		if(!$serviceRegistry->hasService($type)){
 			$serviceRegistry->register($type, SuperBrightness::class);
 			Log::add('CustomFilter ' . SuperBrightness::class . ' registered', Log::DEBUG, 'IFR');
-
 		}
 		$className = $this->getClassName($type, $serviceRegistry, CustomImage::class);
 
@@ -122,6 +121,22 @@ class PlgSystemImageFilterTest extends CMSPlugin
 			throw new \RuntimeException('The ' . ucfirst($className) . ' className is null.');
 		}
 		return $className;
+	}
+
+	/**
+	 *	get the classname by type
+	 *
+	 */
+	public function checkCustomFilterRegistry()
+	{
+		// 1) überschreibe ImageFilterRegistry mit Factory::getContainer  static::$serviceRegistry = Factory::getContainer()->set(ImageFilterRegistry::class, new customRegistry);
+		// 2) instantiere image
+		// 3) image->filter(Brightness) hier ist der custom brightness
+		Factory::getContainer()->set(\Joomla\CMS\Image\ImageFilterRegistry::class,new \Joomla\CMS\Customimage\ImageFilterRegistry);
+		$options[IMG_FILTER_BRIGHTNESS] = 50;
+		$image = new Image(imagecreatetruecolor(1, 1));
+		$image->filter("brightness",$options);
+
 	}
 
 

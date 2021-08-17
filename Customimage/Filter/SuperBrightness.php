@@ -12,6 +12,7 @@ namespace   Joomla\CMS\Customimage\Filter;
 \defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Image\ImageFilter;
+use Joomla\CMS\Log\Log;
 
 /**
  * Image Filter class adjust the brightness of an image.
@@ -32,6 +33,8 @@ class SuperBrightness extends ImageFilter
 	 */
 	public function execute(array $options = [])
 	{
+		Log::add('Excecute SuperBrightness Custom Filter', Log::DEBUG, 'IFR');
+
 		// Validate that the brightness value exists and is an integer.
 		if (!isset($options[IMG_FILTER_BRIGHTNESS]) || !\is_int($options[IMG_FILTER_BRIGHTNESS]))
 		{

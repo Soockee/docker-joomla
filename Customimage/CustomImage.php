@@ -165,6 +165,7 @@ class Customimage
 		if (!static::$serviceRegistry)
 		{
 			static::$serviceRegistry = Factory::getContainer()->get(ImageFilterRegistry::class);
+
 		}
 
 		return static::$serviceRegistry;
