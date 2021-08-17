@@ -7,18 +7,18 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\CMS\ImageFilterTest\Filter;
+namespace   Joomla\CMS\Customimage\Filter;
 
 \defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Image\ImageFilter;
 
 /**
- * Image Filter class adjust the brightness of an image.
+ * Image Filter class adjust the smoothness of an image.
  *
  * @since  2.5.0
  */
-class Brightness extends ImageFilter
+class Smooth extends ImageFilter
 {
 	/**
 	 * Method to apply a filter to an image resource.
@@ -32,13 +32,13 @@ class Brightness extends ImageFilter
 	 */
 	public function execute(array $options = [])
 	{
-		// Validate that the brightness value exists and is an integer.
-		if (!isset($options[IMG_FILTER_BRIGHTNESS]) || !\is_int($options[IMG_FILTER_BRIGHTNESS]))
+		// Validate that the smoothing value exists and is an integer.
+		if (!isset($options[IMG_FILTER_SMOOTH]) || !\is_int($options[IMG_FILTER_SMOOTH]))
 		{
-			throw new \InvalidArgumentException('No valid brightness value was given.  Expected integer.');
+			throw new \InvalidArgumentException('No valid smoothing value was given.  Expected integer.');
 		}
 
-		// Perform the brightness filter.
-		imagefilter($this->handle, IMG_FILTER_BRIGHTNESS, $options[IMG_FILTER_BRIGHTNESS]);
+		// Perform the smoothing filter.
+		imagefilter($this->handle, IMG_FILTER_SMOOTH, $options[IMG_FILTER_SMOOTH]);
 	}
 }

@@ -8,15 +8,14 @@
 
 defined('_JEXEC') or die;
 
-// namespace Joomla\CMS\ImageFilterTest;
-
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Image\Image;
 use Joomla\CMS\Image\ImageFilterRegistry;
 use Joomla\CMS\Image\Filter\Brightness;
 use Joomla\CMS\Factory;
-
+use Joomla\CMS\Customimage\Filter\SuperBrightness;
+use Joomla\CMS\Customimage\CustomImage;
 /**
  * Joomla! Language Filter Plugin.
  *
@@ -56,38 +55,48 @@ class PlgSystemImageFilterTest extends CMSPlugin
 	 */
 	public function onAfterInitialise()
 	{	
+		JLoader::import('socke.customimage.library');
 		Log::add('IFR STARTING  INIT', Log::DEBUG, 'IFR');
-		$this->overwriteServiceRegistry();
+	// $image = new CustomImage(imagecreatetruecolor(1, 1));
+	// $image->getServiceRegistry()->register("superbrightness", SuperBrightness::class);
+		Log::add('CUSTOM NAMESPACES IMAGE CREATED', Log::DEBUG, 'IFR');
+
 		// $type = "brightness";
-		$this->checkDefaultImageClass("brightness");
+		$this->checkDefaultImageClassWithCustomFilter("superbrightness");
 		$this->checkCustomImageClass("superbrightness");
 	}
 	
-	public  function checkDefaultImageClass($type)
+	public  function checkDefaultImageClassWithCustomFilter($type)
 	{
 		$image = new Image(imagecreatetruecolor(1, 1));
 		// Verify that the filter type exists.
 		$serviceRegistry = Image::getServiceRegistry();
-		$className = $this->getClassName($type, $serviceRegistry);
+		if(!$serviceRegistry->hasService($type)){
+			$serviceRegistry->register($type, SuperBrightness::class);
+		}
+		$className = $this->getClassName($type, $serviceRegistry, Image::class);
 		// Instantiate the filter object.
 		$instance = new $className($image->getHandle());
 
-		if(!$this->isValid($instance)){
+		if(!$this->isValid($instance, SuperBrightness::class)){
 			throw new \RuntimeException('The ' . ucfirst($type) . ' image filter is not valid.');
 		}
 
 	}
 	public  function checkCustomImageClass($type)
 	{
-		$image = new CustomImages\CustomImage(imagecreatetruecolor(1, 1));
+		$image = new CustomImage(imagecreatetruecolor(1, 1));
 		// Verify that the filter type exists.
-		$serviceRegistry =  CustomImages\CustomImage::getServiceRegistry();
-		$className = $this->getClassName($type, $serviceRegistry);
+		$serviceRegistry =  CustomImage::getServiceRegistry();
+		if(!$serviceRegistry->hasService($type)){
+			$serviceRegistry->register($type, SuperBrightness::class);
+		}
+		$className = $this->getClassName($type, $serviceRegistry, CustomImage::class);
 
 		// Instantiate the filter object.
 		$instance = new $className($image->getHandle());
 
-		if(!isValid($instance)){
+		if(!$this->isValid($instance, SuperBrightness::class)){
 			throw new \RuntimeException('The ' . ucfirst($type) . ' image filter is not valid.');
 		}
 	}
@@ -96,11 +105,11 @@ class PlgSystemImageFilterTest extends CMSPlugin
 	 *	get the classname by type
 	 *
 	 */
-	public function getClassName($type, $serviceRegistry)
+	public function getClassName($type, $serviceRegistry, $imageclass)
 	{
 		if ($serviceRegistry->hasService($type))
 		{
-			$className =  CustomImages\CustomImage::getServiceRegistry()->getService($type);
+			$className =  $imageclass::getServiceRegistry()->getService($type);
 		}
 		else{
 			throw new \RuntimeException('The ' . $serviceRegistry . ' has no service of type ' . $type);
@@ -116,25 +125,14 @@ class PlgSystemImageFilterTest extends CMSPlugin
 	 *	checks if a given instance is valid
 	 *
 	 */
-	public function isValid($instance)
+	public function isValid($instance, $instanceCheckType)
 	{
 		// Verify that the filter type is valid.
-		if (!($instance instanceof Brightness))
+		if (!($instance instanceof $instanceCheckType))
 		{
-			throw new \RuntimeException('The ' . ucfirst($type) . ' image filter is not valid.');
+			throw new \RuntimeException('The ' . get_class($instance) . ' image filter with is not valid.');
 		}
-		Log::add('Verified that the filter is valid', Log::DEBUG, 'IFR');
+		Log::add('Verified that the ' . get_class($instance) . ' filter is of type ' . $instanceCheckType . ' and therefore valid', Log::DEBUG, 'IFR');
 		return TRUE;
-	}
-
-	/**
-	 * overrides the service registry, which registered an additional filter.
-	 *
-	 */
-	public function overwriteServiceRegistry()
-	{
-		$serviceRegistry = Factory::getContainer()->get(ImageFilterRegistry::class);
-		$serviceRegistry->register("superbrightness", Filter\SuperBrightness::class);
-		Factory::getContainer()->set(ImageFilterRegistry::class, $registry);
 	}
 }

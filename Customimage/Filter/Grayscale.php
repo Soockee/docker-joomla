@@ -7,18 +7,18 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace IFT\Filter;
+namespace   Joomla\CMS\Customimage\Filter;
 
 \defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Image\ImageFilter;
 
 /**
- * Image Filter class to add an edge detect effect to an image.
+ * Image Filter class to transform an image to grayscale.
  *
  * @since  2.5.0
  */
-class Edgedetect extends ImageFilter
+class Grayscale extends ImageFilter
 {
 	/**
 	 * Method to apply a filter to an image resource.
@@ -31,7 +31,7 @@ class Edgedetect extends ImageFilter
 	 */
 	public function execute(array $options = [])
 	{
-		// Perform the edge detection filter.
-		imagefilter($this->handle, IMG_FILTER_EDGEDETECT);
+		// Perform the grayscale filter.
+		imagefilter($this->handle, IMG_FILTER_GRAYSCALE);
 	}
 }

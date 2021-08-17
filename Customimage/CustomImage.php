@@ -10,16 +10,17 @@
 
 \defined('JPATH_PLATFORM') or die;
 
-namespace IFT;
+namespace Joomla\CMS\Customimage;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Image\ImageFilterRegistry;
 
 /**
  * Class to manipulate an image.
  *
  * @since  1.7.3
  */
-class CustomImage
+class Customimage
 {
 	/**
 	 * @const  integer

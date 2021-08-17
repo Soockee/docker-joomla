@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace IFT\Filter;
+namespace   Joomla\CMS\Customimage\Filter;
 
 \defined('JPATH_PLATFORM') or die;
 
