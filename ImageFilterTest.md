@@ -239,3 +239,7 @@ class PlgSystemImageFilterTest extends CMSPlugin
 
 
 Libraries/src/CustomImage uses different namespace then image  Libraries/src/Image
+
+
+
+https://github.com/joomla/joomla-cms/pull/31818

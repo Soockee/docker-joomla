@@ -30,8 +30,11 @@ RUN curl -Lo xampp-linux-installer.run ${XAMPP_URL} \
   && mkdir -p /var/run/sshd \ 
   && sed -ri 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config 
 
+# Install xdebug
+RUN ./opt/lampp/bin/pecl intall xdebug
+
 # Install Composer
-RUN wget -O composer-setup.php https://getcomposer.org/installer \ 
+RUN wgetz -O composer-setup.php https://getcomposer.org/installer \ 
   && ./opt/lampp/bin/php composer-setup.php --install-dir=/usr/local/bin --filename=composer \ 
   && composer self-update
 
