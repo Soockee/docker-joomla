@@ -1,6 +1,6 @@
 ## Notes about Security
 
-Dienstag:
+Mittwoch:
 	* Task definition
 	* Talk with Julia: 
 		* Whats the scope?
@@ -8,12 +8,27 @@ Dienstag:
 			* concept 
 			* proof of concept implementation
 
-Mittwoch: 
+Donnerstag: 
 	* Debugger
 	* Testing von Fileuploads
 		* svg
 		* image.jpg.php
 		* a php script with .jpg ending
+
+
+
+Freitag: 
+	* XSS gif
+	* script file getarnt als png, indem magic number als hex eingetragen worden ist
+		* upload ging, aber was damit anstellen?
+	* Testing von Fileuploads
+		* svg
+		* image.jpg.php
+		* a php script with .jpg ending
+	* versucht article scripte einzubinden.
+		* hat nicht funktiniert
+	d.h. Bypass Content-Type & magic number funktioniert in gewissen masse, aber bringt nicht viel, ausser das die datein im /images folder liegen und mehr oder weniger kautte .png bzw. .gif sind.
+	* Datei extensions evaluiert. Alle Formate machen soweit sinn. Doc dateien könnten macros enthalten, sind aber auch ausreichen gekapselt.
 	
 
 ### XDebug 3 Config with lampp stack inside container running on WSL and PHPStorm
@@ -48,3 +63,4 @@ xdebug.log=/var/log/xdebug.log
 PHPStorm
 
 just make sure the path mapping are correct. Make sure your local project files map to the project in the container
+
