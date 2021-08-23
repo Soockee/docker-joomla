@@ -35,6 +35,10 @@ Montag:
 	* Ideen:
 		* HTML Sanitze Check, damit html datein hochgeladen werden können
 		* SVG ist ontop of html und damit noch schwieriger/unsicherer
+	* Umsetzung vom XSS check:
+		* komplette Datei einlesen 
+
+	
 
 
 ### XDebug 3 Config with lampp stack inside container running on WSL and PHPStorm
@@ -110,4 +114,50 @@ HTML/JS which might get called by an admin via email or w/e phishing
 	</script>
 </body>
 </html>
+```
+
+
+
+#### PR Message?
+
+```
+Pull Request for Issue #31517
+
+### Summary of Changes
+
+the xss_check now checks the whole file for potentially dangerous HTML tags.
+
+### Testing Instructions
+
+1) enable SVG in the media manager configuration ( that is extensions and mime-type  )
+![pr_1](https://user-images.githubusercontent.com/24325735/130475926-f90505f9-1554-4d5a-8636-906d9544797a.png)
+
+
+2) upload a malicious SVG, e.g, 
+```
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+  <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
+  <script type="text/javascript">
+    alert(document.domain);
+  </script>
+</svg>
+```
+
+3) the upload should be rejected
+
+### Actual result BEFORE applying this Pull Request
+
+The upload is not rejected, even though the svg contains the <script> and the <!DOCTYPE HTML tag
+One can run the image script by using the shareable link or opening the file directly, e.g., /images/xss.svg
+
+### Expected result AFTER applying this Pull Request
+
+The upload is rejected, because the svg contains the <script> and the <!DOCTYPE  HTML tag
+
+### Documentation Changes Required
+maybe some warnings that SVGs are potentially dangerous 
+
 ```
