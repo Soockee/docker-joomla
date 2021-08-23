@@ -76,6 +76,8 @@ just make sure the path mapping are correct. Make sure your local project files 
 
 Enable Cors with Wildcard, because someone might think its a good thing
 
+![](./img/unfortunate_attack.png)
+
 HTML/JS which might get called by an admin via email or w/e phishing
 ```html
 <html>
